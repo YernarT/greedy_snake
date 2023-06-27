@@ -1,0 +1,19 @@
+{
+  "name": "greedy_snake",
+  "version": "1.0.0",
+  "description": "classic snake game",
+  "main": "./src/main.ts",
+  "scripts": {
+    "dev": "vite dev",
+    "build": "vite build"
+  },
+  "devDependencies": {
+    "autoprefixer": "^10.4.14",
+    "less": "^4.1.3",
+    "path": "^0.12.7",
+    "vite": "^4.3.9"
+  },
+  "author": "https://github.com/YernarT",
+  "repository": "https://github.com/YernarT/greedy_snake",
+  "license": "MIT"
+}
