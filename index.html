@@ -25,17 +25,35 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&display=swap"
       rel="stylesheet"
     />
 
     <!-- Styles -->
     <link rel="stylesheet" href="./src/styles/variables.css" />
     <link rel="stylesheet" href="./src/styles/reset.css" />
+    <link rel="stylesheet" href="./src/styles/menu.css" />
+    <link rel="stylesheet" href="./src/styles/block.css" />
 
     <title>Greedy Snake</title>
   </head>
   <body>
+    <div class="menu">
+      <div class="menu__head">
+        <img class="menu__logo" src="/src/images/logo.png" alt="Logo" />
+        <h1 class="menu__title">Greedy Snake</h1>
+
+        <button class="menu__start-btn" data-js="startGame">
+          <img
+            class="menu__start-btn-icon"
+            src="/src/images/start-icon.png"
+            alt="Strat Icon"
+          />
+          <span class="menu__start-btn-text">Start</span>
+        </button>
+      </div>
+    </div>
+
     <script defer type="module" src="/src/main.ts"></script>
   </body>
 </html>
