@@ -1,0 +1,17 @@
+.block {
+  width: var(--size);
+  height: var(--size);
+  border: 1px dashed #666;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1;
+
+  transform: translate(var(--transformX), var(--transformY));
+  transition: all var(--transition);
+}
