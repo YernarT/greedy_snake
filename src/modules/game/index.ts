@@ -34,7 +34,8 @@ export default class Game {
     eventModule.onResize(() => this.#handleResizeForBlock());
     // 移动蛇
     eventModule.onMove((direction: T_Direction) => {
-      console.log(direction);
+      this.#snake.handleMove(direction);
+      this.#snake.reRender();
     });
   }
 
