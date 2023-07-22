@@ -15,7 +15,7 @@ export type T_MAP_Position = {
   column: number;
 };
 
-export type T_Direction = "TOP" | "BOTTOM" | "LEFT" | "RIGHT";
+export type T_Direction = "RIGHT" | "BOTTOM" | "LEFT" | "TOP";
 
 export type T_GameStatus = "READY" | "PAUSE" | "RUNNING" | "WIN" | "FAIL";
 
