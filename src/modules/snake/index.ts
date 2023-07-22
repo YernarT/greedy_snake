@@ -27,8 +27,12 @@ export const defaultNodeList = [
  * 该模块用于蛇的逻辑
  */
 export default class Snake {
+  // 蛇的方向
   direction: T_Direction;
+  // 节点链表(伪)
   nodeList: T_SnakeNode[];
+  // 蛇的状态
+  #isRunning = false;
   // 各种定时器
   #timerOfMoving: number | null;
 
@@ -47,13 +51,20 @@ export default class Snake {
     return this.nodeList[0];
   }
 
+  // 获取蛇尾
+  get tail() {
+    // 此处使用 Array.at(index) 的类型推导会返回 `undefined | T_SnakeNode`
+    // https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Array/at
+    return this.nodeList[this.nodeList.length - 1];
+  }
+
   // 修饰蛇头
   decorateHead() {
     this.head.block.$el.innerHTML = "头";
   }
 
   // 修饰蛇身
-  decorateNode(node: T_SnakeNode) {
+  decorateBody(node: T_SnakeNode) {
     node.block.$el.innerHTML = "身";
   }
 
@@ -61,23 +72,103 @@ export default class Snake {
   decorateSnake() {
     this.nodeList.forEach((node, index) => {
       if (index !== 0) {
-        this.decorateNode(node);
+        this.decorateBody(node);
       } else {
         this.decorateHead();
       }
     });
   }
 
+  /**
+   * 方向检测
+   * @returns true正确, false错误
+   */
+  detectDirection(direction: T_Direction) {
+    // 忽略相同的方向 (否则会产生重复定时器)
+    if (this.direction === direction) {
+      return !this.#isRunning;
+    }
+
+    switch (direction) {
+      case "RIGHT":
+      case "LEFT":
+        return this.direction === "TOP" || this.direction === "BOTTOM";
+      case "TOP":
+      case "BOTTOM":
+        return this.direction === "LEFT" || this.direction === "RIGHT";
+    }
+  }
+
+  /**
+   * 碰撞检测
+   * @returns true撞到, false未撞
+   */
+  detectCollision() {
+    return this.nodeList.some((node) => {
+      this.head.currentPosition === node.currentPosition;
+    });
+  }
+
+  // 移动蛇头
+  #moveHead(direction: T_Direction) {
+    this.head.previousPosition = { ...this.head.currentPosition };
+
+    switch (direction) {
+      case "RIGHT":
+        this.head.currentPosition.column += 1;
+        break;
+      case "BOTTOM":
+        this.head.currentPosition.row += 1;
+        break;
+      case "LEFT":
+        this.head.currentPosition.column -= 1;
+        break;
+      case "TOP":
+        this.head.currentPosition.row -= 1;
+        break;
+    }
+  }
+
+  // 移动蛇身
+  #moveBody(previousNode: T_SnakeNode, currentNode: T_SnakeNode) {
+    currentNode.previousPosition = currentNode.currentPosition;
+    currentNode.currentPosition = previousNode.previousPosition;
+  }
+
   // 移动蛇
   handleMove(direction: T_Direction) {
-    this.nodeList.forEach((node) => {
-      console.log(node);
+    if (!this.detectDirection(direction)) {
+      throw new Error("不正确的方向");
+    }
+    // 更新方向
+    this.direction = direction;
+
+    this.nodeList.forEach((node, index) => {
+      if (index !== 0) {
+        // 上一个节点
+        const prevNode = this.nodeList[index - 1];
+        this.#moveBody(prevNode, node);
+      } else {
+        this.#moveHead(direction);
+      }
     });
+
+    if (this.detectCollision()) {
+      throw new Error("撞到了身体!");
+    }
   }
 
   render() {
     this.nodeList.forEach((node) => {
       node.block.render();
+      node.block.setPosition();
+    });
+  }
+
+  reRender() {
+    this.nodeList.forEach((node) => {
+      node.block.row = node.currentPosition.row;
+      node.block.column = node.currentPosition.column;
       node.block.setPosition();
     });
   }
