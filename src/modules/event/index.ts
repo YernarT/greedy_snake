@@ -23,6 +23,11 @@ export default class EventModule {
     });
   }
 
+  /**
+   * 用户按下了移动键
+   * `↑`, `←`, `↓`, `→`
+   * `W`, `A`, `S`, `D`
+   */
   onMove(callback: (direction: T_Direction) => void) {
     window.addEventListener("keydown", (e) => {
       if (e.code === "ArrowRight" || e.code === "KeyD") {
