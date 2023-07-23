@@ -24,3 +24,5 @@ export type T_SnakeNode = {
   previousPosition: T_MAP_Position;
   currentPosition: T_MAP_Position;
 };
+
+export type T_Task = CallableFunction;
