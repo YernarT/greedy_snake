@@ -35,7 +35,6 @@ export default class Game {
     // 移动蛇
     eventModule.onMove((direction: T_Direction) => {
       this.#snake.handleMove(direction);
-      this.#snake.reRender();
     });
   }
 
