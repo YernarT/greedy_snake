@@ -13,13 +13,13 @@ export const defaultNodeList = [
   },
   {
     block: new Block({ row: 7, column: 13 }),
-    previousPosition: { row: 7, column: 14 },
-    currentPosition: { row: 7, column: 14 },
+    previousPosition: { row: 7, column: 13 },
+    currentPosition: { row: 7, column: 13 },
   },
   {
     block: new Block({ row: 7, column: 12 }),
-    previousPosition: { row: 7, column: 14 },
-    currentPosition: { row: 7, column: 14 },
+    previousPosition: { row: 7, column: 12 },
+    currentPosition: { row: 7, column: 12 },
   },
 ];
 
@@ -86,7 +86,7 @@ export default class Snake {
   detectDirection(direction: T_Direction) {
     // 忽略相同的方向 (否则会产生重复定时器)
     if (this.direction === direction) {
-      return !this.#isRunning;
+      return !this.#isRunning && this.#timerOfMoving === null;
     }
 
     switch (direction) {
@@ -138,11 +138,16 @@ export default class Snake {
   // 移动蛇
   handleMove(direction: T_Direction) {
     if (!this.detectDirection(direction)) {
-      throw new Error("不正确的方向");
+      // throw new Error("不正确的方向");
+      return;
+    } else {
+      // 更新方向
+      this.direction = direction;
+      this.#timerOfMoving && clearInterval(this.#timerOfMoving);
+      this.#timerOfMoving = null;
     }
-    // 更新方向
-    this.direction = direction;
 
+    // this.#timerOfMoving = setInterval(() => {
     this.nodeList.forEach((node, index) => {
       if (index !== 0) {
         // 上一个节点
@@ -156,6 +161,10 @@ export default class Snake {
     if (this.detectCollision()) {
       throw new Error("撞到了身体!");
     }
+
+    // @TODO 需要安排一个任务队列
+    this.reRender();
+    // }, 500);
   }
 
   render() {
