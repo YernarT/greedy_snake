@@ -39,16 +39,19 @@
 
   cursor: pointer;
   outline: none;
-  border: none;
+  border: 1px solid var(--c-primary);
   border-radius: 6px;
-  background: transparent;
+  background-color: transparent;
 
-  transition: background-color var(--transitoin), box-shadow var(--transitoin);
+  transition: all var(--transition);
 }
 
 .menu__start-btn:hover {
-  background: #000;
-  box-shadow: 0 0 10px #fff;
+  background-color: rgba(0, 0, 0, 0.5);
+  box-shadow: 0 0 24px rgba(16, 225, 128, 0.3);
+}
+.menu__start-btn:active {
+  transform: scale(0.95) translateY(4px);
 }
 
 .menu__start-btn-icon {
