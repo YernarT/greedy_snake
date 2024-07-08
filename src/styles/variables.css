@@ -1,5 +1,7 @@
 :root {
   --c-text: #f5f5f5;
+  --c-primary: #3dc285;
+  --c-background: #08080f;
 
   --transition: 300ms ease;
 }
