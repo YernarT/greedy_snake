@@ -1,6 +1,3 @@
-// Types
-import type { T_ScreenSize } from "@/modules/dto";
-
 export interface I_BlockOptions {
   x: number;
   y: number;
