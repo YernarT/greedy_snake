@@ -13,12 +13,12 @@ export type T_Direction = "NULL" | "RIGHT" | "BOTTOM" | "LEFT" | "TOP";
 export type T_GameStatus = "READY" | "PAUSE" | "RUNNING" | "WIN" | "FAIL";
 
 export type T_SnakeNode = {
-  // block: Block;
   previousPosition: T_Position;
   currentPosition: T_Position;
 };
 
-export type T_Task = {
+export interface I_Task<T = any> {
   taskId: string;
-  renderFunction: CallableFunction;
-};
+  renderFunction: (this: T, ctx: CanvasRenderingContext2D) => void;
+  thisArg: T;
+}
