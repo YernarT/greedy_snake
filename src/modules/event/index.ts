@@ -6,21 +6,37 @@ import type { T_Direction } from "@/modules/dto";
  */
 
 export default class EventModule {
+  #events: Partial<
+    Record<keyof WindowEventMap | "startGame", CallableFunction[]>
+  > = {};
+
+  /**
+   * 浏览器窗口尺寸发生改变
+   */
   onResize(callback: () => void) {
-    window.addEventListener("resize", callback);
+    if (this.#events.resize) {
+      this.#events.resize.push(callback);
+    } else {
+      window.addEventListener("resize", () => {
+        this.#events.startGame = [callback];
+        this.#events.startGame.forEach((cb) => cb());
+      });
+    }
   }
 
+  /**
+   * 用户点击了开始按钮
+   */
   onClickStart(callback: () => void) {
-    const startGameBtn = document.querySelector('[data-js="startGame"]');
-    startGameBtn?.addEventListener("click", () => callback());
-  }
-
-  onTabSpace(callback: () => void) {
-    window.addEventListener("keydown", (e) => {
-      if (e.code === "Space") {
-        callback();
-      }
-    });
+    if (this.#events.startGame) {
+      this.#events.startGame.push(callback);
+    } else {
+      const startGameBtn = document.querySelector('[data-js="startGame"]');
+      startGameBtn?.addEventListener("click", () => {
+        this.#events.startGame = [callback];
+        this.#events.startGame.forEach((cb) => cb());
+      });
+    }
   }
 
   /**
@@ -29,16 +45,23 @@ export default class EventModule {
    * `W`, `A`, `S`, `D`
    */
   onMove(callback: (direction: T_Direction) => void) {
-    window.addEventListener("keydown", (e) => {
-      if (e.code === "ArrowRight" || e.code === "KeyD") {
-        callback("RIGHT");
-      } else if (e.code === "ArrowDown" || e.code === "KeyS") {
-        callback("BOTTOM");
-      } else if (e.code === "ArrowLeft" || e.code === "KeyA") {
-        callback("LEFT");
-      } else if (e.code === "ArrowUp" || e.code === "KeyW") {
-        callback("TOP");
-      }
-    });
+    if (this.#events.keydown) {
+      this.#events.keydown.push(callback);
+    } else {
+      this.#events.keydown = [callback];
+      window.addEventListener("keydown", (e) => {
+        this.#events.keydown!.forEach((cb) => {
+          if (e.code === "ArrowRight" || e.code === "KeyD") {
+            cb("RIGHT");
+          } else if (e.code === "ArrowDown" || e.code === "KeyS") {
+            cb("BOTTOM");
+          } else if (e.code === "ArrowLeft" || e.code === "KeyA") {
+            cb("LEFT");
+          } else if (e.code === "ArrowUp" || e.code === "KeyW") {
+            cb("TOP");
+          }
+        });
+      });
+    }
   }
 }
