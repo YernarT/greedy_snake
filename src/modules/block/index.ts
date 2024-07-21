@@ -15,6 +15,8 @@ export function createBlock(
   ctx: CanvasRenderingContext2D,
   { x, y, strokeStyle, size }: I_BlockOptions
 ) {
+  // @TODO: 待优化的点, 不需要每次都调用 `setLineDash`,
+  // 通过 Performace 调查发现多次调用将消耗 130+ ms
   ctx.setLineDash([4, 4]);
   ctx.strokeStyle = strokeStyle;
   ctx.strokeRect(x, y, size, size);
