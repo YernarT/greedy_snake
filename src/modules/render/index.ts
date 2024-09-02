@@ -11,8 +11,8 @@ export default class RenderTask {
   #renderInterval = 500;
   #lastRenderTime = 0;
   #taskList = [] as I_Task[];
-  #canvas!: HTMLCanvasElement;
-  #canvasContext!: CanvasRenderingContext2D;
+  canvas!: HTMLCanvasElement;
+  canvasContext!: CanvasRenderingContext2D;
 
   constructor() {
     // 初始化 canvas
@@ -24,19 +24,19 @@ export default class RenderTask {
   #initCanvas() {
     const canvas = document.querySelector("canvas") as HTMLCanvasElement;
     const context = canvas.getContext("2d") as CanvasRenderingContext2D;
-    this.#canvas = canvas;
-    this.#canvasContext = context;
+    this.canvas = canvas;
+    this.canvasContext = context;
   }
 
   /** 设置 canvas 尺寸 */
   setCanvasSize() {
     const dpr = window.devicePixelRatio || 1;
     const { screenWidth, screenHeight } = Map.getScreenSize();
-    this.#canvas.width = Math.round(screenWidth * dpr);
-    this.#canvas.height = Math.round(screenHeight * dpr);
-    this.#canvas.style.width = `${screenWidth}px`;
-    this.#canvas.style.height = `${screenHeight}px`;
-    this.#canvasContext.scale(dpr, dpr);
+    this.canvas.width = Math.round(screenWidth * dpr);
+    this.canvas.height = Math.round(screenHeight * dpr);
+    this.canvas.style.width = `${screenWidth}px`;
+    this.canvas.style.height = `${screenHeight}px`;
+    this.canvasContext.scale(dpr, dpr);
   }
 
   #createTaskId() {
@@ -79,15 +79,10 @@ export default class RenderTask {
       // 更新渲染时间
       this.#lastRenderTime = timestamp;
       // 清空画布
-      this.#canvasContext.clearRect(
-        0,
-        0,
-        this.#canvas.width,
-        this.#canvas.height
-      );
+      this.canvasContext.clearRect(0, 0, this.canvas.width, this.canvas.height);
       // 执行所有渲染任务
       this.#taskList.forEach((task) => {
-        task.renderFunction.bind(task.thisArg, this.#canvasContext)();
+        task.renderFunction.bind(task.thisArg, this.canvasContext)();
       });
     }
 
