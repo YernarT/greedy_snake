@@ -83,7 +83,8 @@ export default class Renderer {
     thisArg?: I_Task<T>["thisArg"]
   ) {
     const taskId = this.#createTaskId();
-    // 插入至 倒数第一 位置
+    // 插入至 倒数第一 位置 
+    // taskList: [markerFn, task1, task2, 插入这里, markerFn]
     this.#taskList.splice(this.#taskList.length - 1, 0, {
       taskId,
       renderFunction,
